@@ -1,14 +1,13 @@
 import express from "express";
 import morgan from "morgan";
+import { NODE_ENV, PORT } from "./config/secrets.js";
 
 const app = express();
-
-process.loadEnvFile();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-if (process.env.NODE_ENV === "development") {
+if (NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
@@ -16,8 +15,8 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Hello world!" });
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(PORT, () => {
   console.log(
-    `Server is up and running on http://localhost:${process.env.PORT}`
+    `Server is up and running on http://localhost:${PORT} in ${NODE_ENV} mode.`
   );
 });
