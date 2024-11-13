@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import courseRoutes from "./routes/courseRoutes.js";
 import { NODE_ENV, PORT } from "./config/secrets.js";
+import { globalError, notFoundError } from "./middlewares/errorMiddleware.js";
 
 const app = express();
 
@@ -14,9 +15,12 @@ if (NODE_ENV === "development") {
 
 app.use("/api/v1/courses", courseRoutes);
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.status(200).json({ message: "Hello world!" });
 });
+
+app.use(notFoundError);
+app.use(globalError);
 
 app.listen(PORT, () => {
   console.log(
